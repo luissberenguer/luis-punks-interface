@@ -11,7 +11,7 @@ const RequestAccess = () => {
     <Alert status="error">
       <AlertIcon />
       <AlertTitle mr={2}>Conecta tu wallet</AlertTitle>
-      <AlertDescription>para acceder a la app</AlertDescription>
+      <AlertDescription>a la red de <b>Rinkeby</b> para acceder a la app</AlertDescription>
       <CloseButton position="absolute" right="8px" top="8px" />
     </Alert>
   );

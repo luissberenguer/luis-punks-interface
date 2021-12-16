@@ -32,14 +32,14 @@ const Punk = () => {
   const transfer = () => {
     setTransfering(true);
 
-    const address = prompt("Ingresa la dirección a la que queires transferir: ");
+    const address = prompt("Ingresa la dirección a la que deseas transferir el Punk: ");
 
     const isAddress = library.utils.isAddress(address);
 
     if (!isAddress) {
       toast({
         title: "Dirección inválida",
-        description: "La dirección no es una dirección de Ethereum",
+        description: "La dirección no es una dirección de tipo Ethereum",
         status: "error",
       });
       setTransfering(false);
