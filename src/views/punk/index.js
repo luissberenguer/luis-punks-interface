@@ -32,7 +32,7 @@ const Punk = () => {
   const transfer = () => {
     setTransfering(true);
 
-    const address = prompt("Ingresa la dirección: ");
+    const address = prompt("Ingresa la dirección a la que queires transferir: ");
 
     const isAddress = library.utils.isAddress(address);
 
@@ -49,8 +49,13 @@ const Punk = () => {
         .send({
           from: account,
         })
-        .on("error", () => {
+        .on("error", (error) => {
           setTransfering(false);
+          toast({
+            title: "Transferencia fallida",
+            description: error.message,
+            status: "error",
+          });
         })
         .on("transactionHash", (txHash) => {
           toast({
