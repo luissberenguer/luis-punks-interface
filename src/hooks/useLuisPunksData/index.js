@@ -1,8 +1,8 @@
 import { useWeb3React } from "@web3-react/core";
 import { useCallback, useEffect, useState } from "react";
-import usePlatziPunks from "../usePlatziPunks";
+import useLuisPunks from "../useLuisPunks";
 
-const getPunkData = async ({ platziPunks, tokenId }) => {
+const getPunkData = async ({ luisPunks, tokenId }) => {
   const [
     tokenURI,
     dna,
@@ -21,23 +21,23 @@ const getPunkData = async ({ platziPunks, tokenId }) => {
     skinColor,
     topType,
   ] = await Promise.all([
-    platziPunks.methods.tokenURI(tokenId).call(),
-    platziPunks.methods.tokenDNA(tokenId).call(),
-    platziPunks.methods.ownerOf(tokenId).call(),
-    platziPunks.methods.getAccessoriesType(tokenId).call(),
-    platziPunks.methods.getAccessoriesType(tokenId).call(),
-    platziPunks.methods.getClotheColor(tokenId).call(),
-    platziPunks.methods.getClotheType(tokenId).call(),
-    platziPunks.methods.getEyeType(tokenId).call(),
-    platziPunks.methods.getEyeBrowType(tokenId).call(),
-    platziPunks.methods.getFacialHairColor(tokenId).call(),
-    platziPunks.methods.getFacialHairType(tokenId).call(),
-    platziPunks.methods.getHairColor(tokenId).call(),
-    platziPunks.methods.getHatColor(tokenId).call(),
-    platziPunks.methods.getGraphicType(tokenId).call(),
-    platziPunks.methods.getMouthType(tokenId).call(),
-    platziPunks.methods.getSkinColor(tokenId).call(),
-    platziPunks.methods.getTopType(tokenId).call(),
+    luisPunks.methods.tokenURI(tokenId).call(),
+    luisPunks.methods.tokenDNA(tokenId).call(),
+    luisPunks.methods.ownerOf(tokenId).call(),
+    luisPunks.methods.getAccessoriesType(tokenId).call(),
+    luisPunks.methods.getAccessoriesType(tokenId).call(),
+    luisPunks.methods.getClotheColor(tokenId).call(),
+    luisPunks.methods.getClotheType(tokenId).call(),
+    luisPunks.methods.getEyeType(tokenId).call(),
+    luisPunks.methods.getEyeBrowType(tokenId).call(),
+    luisPunks.methods.getFacialHairColor(tokenId).call(),
+    luisPunks.methods.getFacialHairType(tokenId).call(),
+    luisPunks.methods.getHairColor(tokenId).call(),
+    luisPunks.methods.getHatColor(tokenId).call(),
+    luisPunks.methods.getGraphicType(tokenId).call(),
+    luisPunks.methods.getMouthType(tokenId).call(),
+    luisPunks.methods.getSkinColor(tokenId).call(),
+    luisPunks.methods.getTopType(tokenId).call(),
   ]);
 
   const responseMetadata = await fetch(tokenURI);
@@ -68,37 +68,37 @@ const getPunkData = async ({ platziPunks, tokenId }) => {
 };
 
 // Plural
-const usePlatziPunksData = ({ owner = null } = {}) => {
+const useLuisPunksData = ({ owner = null } = {}) => {
   const [punks, setPunks] = useState([]);
   const { library } = useWeb3React();
   const [loading, setLoading] = useState(true);
-  const platziPunks = usePlatziPunks();
+  const luisPunks = useLuisPunks();
 
   const update = useCallback(async () => {
-    if (platziPunks) {
+    if (luisPunks) {
       setLoading(true);
 
       let tokenIds;
 
       if (!library.utils.isAddress(owner)) {
-        const totalSupply = await platziPunks.methods.totalSupply().call();
+        const totalSupply = await luisPunks.methods.totalSupply().call();
         tokenIds = new Array(Number(totalSupply))
           .fill()
           .map((_, index) => index);
       } else {
-        const balanceOf = await platziPunks.methods.balanceOf(owner).call();
+        const balanceOf = await luisPunks.methods.balanceOf(owner).call();
 
         const tokenIdsOfOwner = new Array(Number(balanceOf))
           .fill()
           .map((_, index) =>
-            platziPunks.methods.tokenOfOwnerByIndex(owner, index).call()
+            luisPunks.methods.tokenOfOwnerByIndex(owner, index).call()
           );
 
         tokenIds = await Promise.all(tokenIdsOfOwner);
       }
 
       const punksPromise = tokenIds.map((tokenId) =>
-        getPunkData({ tokenId, platziPunks })
+        getPunkData({ tokenId, luisPunks })
       );
 
       const punks = await Promise.all(punksPromise);
@@ -106,7 +106,7 @@ const usePlatziPunksData = ({ owner = null } = {}) => {
       setPunks(punks);
       setLoading(false);
     }
-  }, [platziPunks, owner, library?.utils]);
+  }, [luisPunks, owner, library?.utils]);
 
   useEffect(() => {
     update();
@@ -120,21 +120,21 @@ const usePlatziPunksData = ({ owner = null } = {}) => {
 };
 
 // Singular
-const usePlatziPunkData = (tokenId = null) => {
+const useLuisPunkData = (tokenId = null) => {
   const [punk, setPunk] = useState({});
   const [loading, setLoading] = useState(true);
-  const platziPunks = usePlatziPunks();
+  const luisPunks = useLuisPunks();
 
   const update = useCallback(async () => {
-    if (platziPunks && tokenId != null) {
+    if (luisPunks && tokenId != null) {
       setLoading(true);
 
-      const toSet = await getPunkData({ tokenId, platziPunks });
+      const toSet = await getPunkData({ tokenId, luisPunks });
       setPunk(toSet);
 
       setLoading(false);
     }
-  }, [platziPunks, tokenId]);
+  }, [luisPunks, tokenId]);
 
   useEffect(() => {
     update();
@@ -147,4 +147,4 @@ const usePlatziPunkData = (tokenId = null) => {
   };
 };
 
-export { usePlatziPunksData, usePlatziPunkData };
+export { useLuisPunksData, useLuisPunkData };

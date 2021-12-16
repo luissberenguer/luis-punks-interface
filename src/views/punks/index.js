@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import PunkCard from "../../components/punk-card";
 import Loading from "../../components/loading";
 import RequestAccess from "../../components/request-access";
-import { usePlatziPunksData } from "../../hooks/usePlatziPunksData";
+import { useLuisPunksData } from "../../hooks/useLuisPunksData";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -27,7 +27,7 @@ const Punks = () => {
   const [validAddress, setValidAddress] = useState(true);
   const { push } = useHistory();
   const { active, library } = useWeb3React();
-  const { punks, loading } = usePlatziPunksData({
+  const { punks, loading } = useLuisPunksData({
     owner: submitted && validAddress ? address : null,
   });
 

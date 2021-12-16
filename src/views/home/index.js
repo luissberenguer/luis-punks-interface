@@ -10,35 +10,45 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
-import usePlatziPunks from "../../hooks/usePlatziPunks";
+import useLuisPunks from "../../hooks/useLuisPunks";
 import { useCallback, useEffect, useState } from "react";
+import useTruncatedAddress from "../../hooks/useTruncatedAddress";
 
 const Home = () => {
   const [isMinting, setIsMinting] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
+  const [currentId, setCurrentId] = useState("")
+  const [availablePunks, setAvailablePunks] = useState(""); 
   const { active, account } = useWeb3React();
-  const platziPunks = usePlatziPunks();
+  const truncatedAccount = useTruncatedAddress(account);
+
+
+  const luisPunks = useLuisPunks();
   const toast = useToast();
 
-  const getPlatziPunksData = useCallback(async () => {
-    if (platziPunks) {
-      const totalSupply = await platziPunks.methods.totalSupply().call();
-      const dnaPreview = await platziPunks.methods
+  const getLuisPunksData = useCallback(async () => {
+    if (luisPunks) {
+      const totalSupply = await luisPunks.methods.totalSupply().call();
+      const maxSupply = await luisPunks.methods.maxSupply().call();
+      const id = await luisPunks.methods._idCounter().call();
+      const dnaPreview = await luisPunks.methods
         .deterministicPseudoRandomDNA(totalSupply, account)
         .call();
-      const image = await platziPunks.methods.imageByDNA(dnaPreview).call();
+      const image = await luisPunks.methods.imageByDNA(dnaPreview).call();
       setImageSrc(image);
+      setCurrentId(id);
+      setAvailablePunks(maxSupply - totalSupply);
     }
-  }, [platziPunks, account]);
+  }, [luisPunks, account]);
 
   useEffect(() => {
-    getPlatziPunksData();
-  }, [getPlatziPunksData]);
+    getLuisPunksData();
+  }, [getLuisPunksData]);
 
   const mint = () => {
     setIsMinting(true);
 
-    platziPunks.methods
+    luisPunks.methods
       .mint()
       .send({
         from: account,
@@ -54,7 +64,7 @@ const Home = () => {
         setIsMinting(false);
         toast({
           title: "Transacción confirmada",
-          description: "Nunca pares de aprender.",
+          description: "Ahora posées un Luis Punk!",
           status: "success",
         });
       })
@@ -95,7 +105,7 @@ const Home = () => {
               zIndex: -1,
             }}
           >
-            Un Platzi Punk
+            Un Luis Punk
           </Text>
           <br />
           <Text as={"span"} color={"green.400"}>
@@ -103,13 +113,13 @@ const Home = () => {
           </Text>
         </Heading>
         <Text color={"gray.500"}>
-          Platzi Punks es una colección de Avatares randomizados cuya metadata
-          es almacenada on-chain. Poseen características únicas y sólo hay 10000
-          en existencia.
+          Luis Punks es una colección de Avatares randomizados cuya metadata
+          es almacenada on-chain. Poseen características únicas y sólo habrán 10000
+          en existencia. En este momento quedan {availablePunks} por crearse.
         </Text>
         <Text color={"green.500"}>
-          Cada Platzi Punk se genera de forma secuencial basado en tu address,
-          usa el previsualizador para averiguar cuál sería tu Platzi Punk si
+          Cada Luis Punk se genera de forma secuencial basado en tu address,
+          usa el previsualizador para averiguar cuál sería tu Luis Punk si
           minteas en este momento
         </Text>
         <Stack
@@ -124,7 +134,7 @@ const Home = () => {
             colorScheme={"green"}
             bg={"green.400"}
             _hover={{ bg: "green.500" }}
-            disabled={!platziPunks}
+            disabled={!luisPunks}
             onClick={mint}
             isLoading={isMinting}
           >
@@ -152,18 +162,18 @@ const Home = () => {
               <Badge>
                 Next ID:
                 <Badge ml={1} colorScheme="green">
-                  1
+                  {currentId}
                 </Badge>
               </Badge>
               <Badge ml={2}>
                 Address:
                 <Badge ml={1} colorScheme="green">
-                  0x0000...0000
+                {truncatedAccount}
                 </Badge>
               </Badge>
             </Flex>
             <Button
-              onClick={getPlatziPunksData}
+              onClick={getLuisPunksData}
               mt={4}
               size="xs"
               colorScheme="green"

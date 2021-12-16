@@ -15,17 +15,17 @@ import {
 import { useWeb3React } from "@web3-react/core";
 import RequestAccess from "../../components/request-access";
 import PunkCard from "../../components/punk-card";
-import { usePlatziPunkData } from "../../hooks/usePlatziPunksData";
+import { useLuisPunkData } from "../../hooks/useLuisPunksData";
 import { useParams } from "react-router-dom";
 import Loading from "../../components/loading";
 import { useState } from "react";
-import usePlatziPunks from "../../hooks/usePlatziPunks";
+import useLuisPunks from "../../hooks/useLuisPunks";
 
 const Punk = () => {
   const { active, account, library } = useWeb3React();
   const { tokenId } = useParams();
-  const { loading, punk, update } = usePlatziPunkData(tokenId);
-  const platziPunks = usePlatziPunks();
+  const { loading, punk, update } = useLuisPunkData(tokenId);
+  const luisPunks = useLuisPunks();
   const toast = useToast();
   const [transfering, setTransfering] = useState(false);
 
@@ -44,7 +44,7 @@ const Punk = () => {
       });
       setTransfering(false);
     } else {
-      platziPunks.methods
+      luisPunks.methods
         .safeTransferFrom(punk.owner, address, punk.tokenId)
         .send({
           from: account,

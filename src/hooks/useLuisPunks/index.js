@@ -1,17 +1,17 @@
 import { useMemo } from "react";
 import { useWeb3React } from "@web3-react/core";
-import PlatziPunksArtifact from "../../config/web3/artifacts/PlatziPunks";
+import LuisPunksArtifact from "../../config/web3/artifacts/LuisPunks";
 
-const { address, abi } = PlatziPunksArtifact;
+const { address, abi } = LuisPunksArtifact;
 
-const usePlatziPunks = () => {
+const useLuisPunks = () => {
   const { active, library, chainId } = useWeb3React();
 
-  const platziPunks = useMemo(() => {
+  const luisPunks = useMemo(() => {
     if (active) return new library.eth.Contract(abi, address[chainId]);
   }, [active, chainId, library?.eth?.Contract]);
 
-  return platziPunks;
+  return luisPunks;
 };
 
-export default usePlatziPunks;
+export default useLuisPunks;
