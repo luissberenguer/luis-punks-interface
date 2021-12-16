@@ -115,7 +115,7 @@ const Home = () => {
         <Text color={"gray.500"}>
           Luis Punks es una colección de Avatares randomizados cuya metadata
           es almacenada on-chain. Poseen características únicas y sólo habrán 10000
-          en existencia. En este momento quedan {availablePunks} por crearse.
+          en existencia. En este momento quedan {availablePunks ? availablePunks : 10000} por crearse.
         </Text>
         <Text color={"green.500"}>
           Cada Luis Punk se genera de forma secuencial basado en tu address,

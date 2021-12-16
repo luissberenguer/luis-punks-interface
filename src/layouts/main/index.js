@@ -58,9 +58,9 @@ const MainLayout = ({ children }) => {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Flex alignItems="center">
-              <Image src="./images/platzi.svg" width="80px" />
-              <Heading size="md" color="purple" mt={0.2} ml={1}>
-                Punks
+              <Image src="./images/crypto-punk.png" width="60px" alt='Luis Punk' borderRadius='full'mr={4}/>
+              <Heading size="md" color="purple" mt={0.2} ml={2}>
+                Luis Punks
               </Heading>
             </Flex>
             <HStack
